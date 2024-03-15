@@ -1,23 +1,36 @@
-import React from 'react';
-import { JitsiMeeting } from "@jitsi/react-sdk";
+import { useEffect } from 'react';
 
-const JitsiMeetingComponent = ({ domain, roomName, configOverwrite, interfaceConfigOverwrite, userInfo }) => {
-  return (
-    <div style={{minHeigh:"100vh"}}>
-      <JitsiMeeting
-        domain={domain}
-        roomName={roomName}
-        configOverwrite={configOverwrite}
-        interfaceConfigOverwrite={interfaceConfigOverwrite}
-        userInfo={userInfo}
-        onApiReady={(externalApi) => {
-          // here you can attach custom event listeners to the Jitsi Meet External API
-          // you can also store it locally to execute commands
-        }}
-        getIFrameRef={(iframeRef) => { iframeRef.style.height = '400px'; }}
-      />
-    </div>
-  );
+const JitsiMeetComponent = () => {
+
+
+  useEffect(() => {
+    if (window.JitsiMeetExternalAPI) {
+      const api = new window.JitsiMeetExternalAPI("8x8.vc", {
+        roomName: "vpaas-magic-cookie-ef69e4e2d8c644b68f667efbcbe334cd/SampleAppSacredPuzzlesRespectGenuinely",
+        parentNode: document.querySelector('#jaas-container'),
+      });
+  
+      return () => {
+        api.dispose();
+      };
+    } else {
+      // If JitsiMeetExternalAPI is not available yet, wait for it to be available
+      const interval = setInterval(() => {
+        if (window.JitsiMeetExternalAPI) {
+          clearInterval(interval);
+          const api = new window.JitsiMeetExternalAPI("8x8.vc", {
+            roomName: "vpaas-magic-cookie-ef69e4e2d8c644b68f667efbcbe334cd/SampleAppSacredPuzzlesRespectGenuinely",
+            parentNode: document.querySelector('#jaas-container'),
+          });
+          return () => {
+            api.dispose();
+          };
+        }
+      }, 1000); // Check every second if the JitsiMeetExternalAPI is available
+    }
+  }, []);
+
+  return <div id="jaas-container" style={{ height: '100vh' }} />;
 };
 
-export default JitsiMeetingComponent;
+export default JitsiMeetComponent;

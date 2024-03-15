@@ -1,5 +1,7 @@
+
 import React, { useState } from 'react';
-import JitsiMeetingComponent from '../Components/JitsiMeetingCompoent';
+// import JitsiMeetingComponent from '../Components/JitsiMeetingCompoent';
+import JitsiMeetComponent from '../Components/JitsiMeetingCompoent';
 
 const App = () => {
   const [domain, setDomain] = useState("meet.jit.si"); // Change this to your custom domain
@@ -27,27 +29,12 @@ const App = () => {
     iframeRef.style.height = '400px';
   };
 
-  const handleJitsiAction = () => {
-    if (jitsiApi) {
-      // console.log(jitsiApi);
-    } else {
-      console.log("Jitsi API is not ready yet.");
-    }
-  };
 
   return (
-    <div>
-      <JitsiMeetingComponent
-        domain={domain}
-        roomName={roomName}
-        configOverwrite={configOverwrite}
-        interfaceConfigOverwrite={interfaceConfigOverwrite}
-        userInfo={userInfo}
-        onApiReady={handleApiReady}
-        getIFrameRef={handleIFrameRef}
-        // jwt={}
-      />
-      <button onClick={handleJitsiAction}>Perform Action with Jitsi API</button>
+    <div style={{height:"100vh"}}>
+    
+       <JitsiMeetComponent />
+    
     </div>
   );
 };
