@@ -1,18 +1,26 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 
 const JitsiMeetComponent = () => {
-  const [renderJitsi, setRenderJitsi] = useState(false);
+  const [isScriptLoaded, setIsScriptLoaded] = useState(false);
 
   useEffect(() => {
-    const timer = setTimeout(() => {
-      setRenderJitsi(true);
-    }, 1000); // Adjust the delay time (in milliseconds) as needed
+    const script = document.createElement('script');
+    script.src = 'https://8x8.vc/vpaas-magic-cookie-ef69e4e2d8c644b68f667efbcbe334cd/external_api.js';
+    script.async = true;
 
-    return () => clearTimeout(timer);
+    script.onload = () => {
+      setIsScriptLoaded(true);
+    };
+
+    document.body.appendChild(script);
+
+    return () => {
+      document.body.removeChild(script);
+    };
   }, []);
 
   useEffect(() => {
-    if (renderJitsi && window.JitsiMeetExternalAPI) {
+    if (isScriptLoaded && window.JitsiMeetExternalAPI) {
       const api = new window.JitsiMeetExternalAPI("8x8.vc", {
         roomName: "vpaas-magic-cookie-ef69e4e2d8c644b68f667efbcbe334cd/SampleAppSacredPuzzlesRespectGenuinely",
         parentNode: document.querySelector('#jaas-container'),
@@ -22,13 +30,13 @@ const JitsiMeetComponent = () => {
         api.dispose();
       };
     }
-  }, [renderJitsi]);
+  }, [isScriptLoaded]);
 
-  return (
-    <div id="jaas-container" style={{ height: '100vh' }}>
-      {!renderJitsi && <p>Loading Jitsi Meet...</p>}
-    </div>
-  );
+  if (!isScriptLoaded) {
+    return <p>Loading Jitsi Meet...</p>;
+  }
+
+  return <div id="jaas-container" style={{ height: '100vh' }} />;
 };
 
 export default JitsiMeetComponent;
