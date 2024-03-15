@@ -29,7 +29,7 @@ const App = () => {
 
   const handleJitsiAction = () => {
     if (jitsiApi) {
-      console.log(jitsiApi);
+      // console.log(jitsiApi);
     } else {
       console.log("Jitsi API is not ready yet.");
     }
