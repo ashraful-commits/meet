@@ -1,0 +1,7 @@
+body{
+  background: #000;
+}
+
+#jitsiMeeting-1{
+  height: 100vh !important;
+}
